@@ -25,6 +25,12 @@ writeEntry(ENTRY_PATH, ENTRY_TEXT);
 // one sentence, 194 characters, no trailing newline, or the grader
 // reads something else.
 const written = readFileSync(ENTRY_PATH, "utf8");
+if (written !== ENTRY_TEXT) {
+  throw new Error("entry.txt does not match the sentence exactly");
+}
+if (written.length < 1 || written.length > 320) {
+  throw new Error("entry.txt must be 1 to 320 characters");
+}
 // Sentence check: split on sentence-ending punctuation ([.!?]+) that is
 // followed by whitespace or the end of the text, then keep only
 // non-empty pieces. Counting raw '.' characters would be wrong: a dot

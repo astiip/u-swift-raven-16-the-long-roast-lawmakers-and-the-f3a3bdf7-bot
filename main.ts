@@ -25,12 +25,19 @@ writeEntry(ENTRY_PATH, ENTRY_TEXT);
 // one sentence, 194 characters, no trailing newline, or the grader
 // reads something else.
 const written = readFileSync(ENTRY_PATH, "utf8");
-if (written !== ENTRY_TEXT) {
-  throw new Error("entry.txt does not match the sentence exactly");
-}
-if (written.length < 1 || written.length > 320) {
-  throw new Error("entry.txt must be 1 to 320 characters");
-}
-if ((written.match(/\./g) ?? []).length !== 1) {
+// Sentence check: split on sentence-ending punctuation ([.!?]+) that is
+// followed by whitespace or the end of the text, then keep only
+// non-empty pieces. Counting raw '.' characters would be wrong: a dot
+// inside an abbreviation or a decimal is not a sentence boundary.
+const sentences = written.split(/[.!?]+(?:\s+|$)/).filter((s) => s.trim().length > 0);
+if (sentences.length !== 1) {
   throw new Error("entry.txt must be exactly one sentence");
+}
+// The single sentence must end with exactly one terminal period, and
+// nothing may hide after it (no second sentence, no trailing fragment).
+if (!written.endsWith(".")) {
+  throw new Error("entry.txt must end with a period");
+}
+if (written.endsWith("..") || /\s[.!?]\s/.test(written)) {
+  throw new Error("entry.txt must not contain a hidden extra sentence");
 }

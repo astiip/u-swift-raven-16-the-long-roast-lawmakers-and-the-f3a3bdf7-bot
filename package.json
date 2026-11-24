@@ -1,0 +1,1 @@
+{"description":"One satirical sentence roasting lawmakers who regulate AI but cannot convert a file to PDF — make.fun entry.","engines":{"node":">=22.18"},"license":"MIT","name":"u-swift-raven-16-the-long-roast-lawmakers-and-the-f3a3bdf7-bot","private":true,"scripts":{"start":"node main.ts"},"type":"module","version":"1.0.0"}
